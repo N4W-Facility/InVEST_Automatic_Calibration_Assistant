@@ -2,7 +2,7 @@
 # -------------------------------------------------------------------------
 # Nature For Water Facility - The Nature Conservancy
 # -------------------------------------------------------------------------
-# InVEST - Version 3.14.3 (update January 2025)
+# InVEST - Version 3.15.1 (update July 2025)
 # -------------------------------------------------------------------------
 #                           BASIC INFORMATION
 # -------------------------------------------------------------------------
@@ -84,7 +84,7 @@ def RunCalInVEST(ProjectPath, InVEST_Main_Path, NameFunObj, NameOpt, NumSim=5):
     # ----------------------------------------------------------------------------------------------------------------------
     NModel = ['AWY', 'SWY', 'SDR', 'NDR_N', 'NDR_P']
     for i in range(0, len(NModel)):
-        if Inputs.loc['Run'][NModel[i]] == 1:
+        if Inputs.loc['Run', NModel[i]] == 1:
 
             # Nombre del modelo
             NameModel = NModel[i]
@@ -146,15 +146,15 @@ def RunCalInVEST(ProjectPath, InVEST_Main_Path, NameFunObj, NameOpt, NumSim=5):
 
             # Gráficas de resultados (Scatter Plot)
             if NameModel == 'AWY':
-                Plot_AWY(ProjectPath, Inputs.loc['Name']['Value'], FO, InVEST_Main_Path, FactorMetric)
+                Plot_AWY(ProjectPath, Inputs.loc['Name', 'Value'], FO, InVEST_Main_Path, FactorMetric)
             if NameModel == 'SWY':
-                Plot_SWY(ProjectPath, Inputs.loc['Name']['Value'], FO, InVEST_Main_Path, FactorMetric)
+                Plot_SWY(ProjectPath, Inputs.loc['Name', 'Value'], FO, InVEST_Main_Path, FactorMetric)
             if NameModel == 'SDR':
-                Plot_SDR(ProjectPath, Inputs.loc['Name']['Value'], FO, InVEST_Main_Path, FactorMetric)
+                Plot_SDR(ProjectPath, Inputs.loc['Name', 'Value'], FO, InVEST_Main_Path, FactorMetric)
             if NameModel == 'NDR_N':
-                Plot_NDR_N(ProjectPath, Inputs.loc['Name']['Value'], FO, InVEST_Main_Path, FactorMetric)
+                Plot_NDR_N(ProjectPath, Inputs.loc['Name', 'Value'], FO, InVEST_Main_Path, FactorMetric)
             if NameModel == 'NDR_P':
-                Plot_NDR_P(ProjectPath, Inputs.loc['Name']['Value'], FO, InVEST_Main_Path, FactorMetric)
+                Plot_NDR_P(ProjectPath, Inputs.loc['Name', 'Value'], FO, InVEST_Main_Path, FactorMetric)
 
             # Execution Model whith best parameters
             RunInVEST(ProjectPath, InVEST_Main_Path)
@@ -209,6 +209,7 @@ def Create_argsInVEST(ProjectPath,UserData,Params,StatusK='SDR'):
     args['calc_sequestration']              = False
     args['do_redd']                         = False
     args['do_valuation']                    = False
+    args['flow_dir_algorithm']              = 'MFD'
 
     # AWY
     if StatusK == "AWY":
@@ -655,30 +656,31 @@ def Read_Inputs_InVEST(InVEST_Main_Path):
     # ----------------------------------------------------------------------------------------------------------------------
     Tmp = pd.read_excel(InVEST_Main_Path,sheet_name='UserData',index_col=0)
     UserData = {}
-    UserData['Suffix']          = Tmp.loc['Name']['Value']
-    UserData['BioTable']        = Tmp.loc['BioTable']['Value']
-    UserData['RainTable']       = Tmp.loc['RainTable']['Value']
-    UserData['LULC']            = Tmp.loc['LULC']['Value']
-    UserData['DEM']             = Tmp.loc['DEM']['Value']
-    UserData['R']               = Tmp.loc['R']['Value']
-    UserData['K']               = Tmp.loc['K']['Value']
-    UserData['SoilDepth']       = Tmp.loc['SoilDepth']['Value']
-    UserData['ETP']             = Tmp.loc['ETP']['Value']
-    UserData['ETP_Path']        = Tmp.loc['ETP_M']['Value']
-    UserData['P']               = Tmp.loc['P']['Value']
-    UserData['P_Path']          = Tmp.loc['P_M']['Value']
-    UserData['PAWC']            = Tmp.loc['PAWC']['Value']
-    UserData['SoilGroup']       = Tmp.loc['HSG']['Value']
-    UserData['Stream']          = Tmp.loc['Stream']['Value']
-    UserData['Basin']           = Tmp.loc['Basin']['Value']
-    UserData['SubBasin']        = Tmp.loc['SubBasin']['Value']
-    UserData['Threshold']       = Tmp.loc['Threshold_Flow']['Value']
-    UserData['Status_AWY']      = Tmp.loc['Run']['AWY']
-    UserData['Status_SWY']      = Tmp.loc['Run']['SWY']
-    UserData['Status_SDR']      = Tmp.loc['Run']['SDR']
-    UserData['Status_NDR_N']    = Tmp.loc['Run']['NDR_N']
-    UserData['Status_NDR_P']    = Tmp.loc['Run']['NDR_P']
-    #UserData['Status_CO2']      = Tmp.loc['Run']['CO2']
+    UserData['Pixel']           = Tmp.loc['Pixel', 'Value']
+    UserData['Suffix']          = Tmp.loc['Name', 'Value']
+    UserData['BioTable']        = Tmp.loc['BioTable', 'Value']
+    UserData['RainTable']       = Tmp.loc['RainTable', 'Value']
+    UserData['LULC']            = Tmp.loc['LULC', 'Value']
+    UserData['DEM']             = Tmp.loc['DEM', 'Value']
+    UserData['R']               = Tmp.loc['R', 'Value']
+    UserData['K']               = Tmp.loc['K', 'Value']
+    UserData['SoilDepth']       = Tmp.loc['SoilDepth', 'Value']
+    UserData['ETP']             = Tmp.loc['ETP', 'Value']
+    UserData['ETP_Path']        = Tmp.loc['ETP_M', 'Value']
+    UserData['P']               = Tmp.loc['P', 'Value']
+    UserData['P_Path']          = Tmp.loc['P_M', 'Value']
+    UserData['PAWC']            = Tmp.loc['PAWC', 'Value']
+    UserData['SoilGroup']       = Tmp.loc['HSG', 'Value']
+    UserData['Stream']          = Tmp.loc['Stream', 'Value']
+    UserData['Basin']           = Tmp.loc['Basin', 'Value']
+    UserData['SubBasin']        = Tmp.loc['SubBasin', 'Value']
+    UserData['Threshold']       = Tmp.loc['Threshold_Flow', 'Value']
+    UserData['Status_AWY']      = Tmp.loc['Run', 'AWY']
+    UserData['Status_SWY']      = Tmp.loc['Run', 'SWY']
+    UserData['Status_SDR']      = Tmp.loc['Run', 'SDR']
+    UserData['Status_NDR_N']    = Tmp.loc['Run', 'NDR_N']
+    UserData['Status_NDR_P']    = Tmp.loc['Run', 'NDR_P']
+    #UserData['Status_CO2']      = Tmp.loc['Run', 'CO2']
 
     return UserData
 
@@ -689,25 +691,25 @@ def Read_Parameters_InVEST(InVEST_Main_Path):
     # ----------------------------------------------------------------------------------------------------------------------
     Tmp = pd.read_excel(InVEST_Main_Path, sheet_name='Params', index_col=0)
     Params = {}
-    Params['Z']                 = Tmp.loc['Z']['Value']
-    Params['Factor-Kc']         = Tmp.loc['Factor-Kc']['Value']
-    Params['Factor-Kc_m']       = Tmp.loc['Factor-Kc_m']['Value']
-    Params['Gamma']             = Tmp.loc['Gamma']['Value']
-    Params['Beta']              = Tmp.loc['Beta']['Value']
-    Params['Alpha']             = Tmp.loc['Alpha']['Value']
-    Params['Factor-C']          = Tmp.loc['Factor-C']['Value']
-    Params['Factor-P']          = Tmp.loc['Factor-P']['Value']
-    Params['IC0']               = Tmp.loc['Borselli-IC0']['Value']
-    Params['L_max']             = Tmp.loc['L_max']['Value']
-    Params['sdr_max']           = Tmp.loc['sdr_max']['Value']
-    Params['Factor_Load_N']     = Tmp.loc['Factor_Load_N']['Value']
-    Params['Factor_Eff_N']      = Tmp.loc['Factor_Eff_N']['Value']
-    Params['SubCri_Len_N']      = Tmp.loc['SubCri_Len_N']['Value']
-    Params['Sub_Eff_N']         = Tmp.loc['Sub_Eff_N']['Value']
-    Params['Factor_Load_P']     = Tmp.loc['Factor_Load_P']['Value']
-    Params['Factor_Eff_P']      = Tmp.loc['Factor_Eff_P']['Value']
-    Params['Borselli-K_SDR']    = Tmp.loc['Borselli-K_SDR']['Value']
-    Params['Borselli-K_NDR']    = Tmp.loc['Borselli-K_NDR']['Value']
+    Params['Z']                 = Tmp.loc['Z', 'Value']
+    Params['Factor-Kc']         = Tmp.loc['Factor-Kc', 'Value']
+    Params['Factor-Kc_m']       = Tmp.loc['Factor-Kc_m', 'Value']
+    Params['Gamma']             = Tmp.loc['Gamma', 'Value']
+    Params['Beta']              = Tmp.loc['Beta', 'Value']
+    Params['Alpha']             = Tmp.loc['Alpha', 'Value']
+    Params['Factor-C']          = Tmp.loc['Factor-C', 'Value']
+    Params['Factor-P']          = Tmp.loc['Factor-P', 'Value']
+    Params['IC0']               = Tmp.loc['Borselli-IC0', 'Value']
+    Params['L_max']             = Tmp.loc['L_max', 'Value']
+    Params['sdr_max']           = Tmp.loc['sdr_max', 'Value']
+    Params['Factor_Load_N']     = Tmp.loc['Factor_Load_N', 'Value']
+    Params['Factor_Eff_N']      = Tmp.loc['Factor_Eff_N', 'Value']
+    Params['SubCri_Len_N']      = Tmp.loc['SubCri_Len_N', 'Value']
+    Params['Sub_Eff_N']         = Tmp.loc['Sub_Eff_N', 'Value']
+    Params['Factor_Load_P']     = Tmp.loc['Factor_Load_P', 'Value']
+    Params['Factor_Eff_P']      = Tmp.loc['Factor_Eff_P', 'Value']
+    Params['Borselli-K_SDR']    = Tmp.loc['Borselli-K_SDR', 'Value']
+    Params['Borselli-K_NDR']    = Tmp.loc['Borselli-K_NDR', 'Value']
 
     return Params
 
@@ -720,47 +722,47 @@ def Read_ParameterRange_InVEST(InVEST_Main_Path):
 
     # Minimum values
     ParamsMin = {}
-    ParamsMin['Z']              = Tmp.loc['Z']['Min']
-    ParamsMin['Factor-Kc']      = Tmp.loc['Factor-Kc']['Min']
-    ParamsMin['Factor-Kc_m']    = Tmp.loc['Factor-Kc_m']['Min']
-    ParamsMin['Gamma']          = Tmp.loc['Gamma']['Min']
-    ParamsMin['Beta']           = Tmp.loc['Beta']['Min']
-    ParamsMin['Alpha']          = Tmp.loc['Alpha']['Min']
-    ParamsMin['Factor-C']       = Tmp.loc['Factor-C']['Min']
-    ParamsMin['Factor-P']       = Tmp.loc['Factor-P']['Min']
-    ParamsMin['IC0']            = Tmp.loc['Borselli-IC0']['Min']
-    ParamsMin['L_max']          = Tmp.loc['L_max']['Min']
-    ParamsMin['sdr_max']        = Tmp.loc['sdr_max']['Min']
-    ParamsMin['Factor_Load_N']  = Tmp.loc['Factor_Load_N']['Min']
-    ParamsMin['Factor_Eff_N']   = Tmp.loc['Factor_Eff_N']['Min']
-    ParamsMin['SubCri_Len_N']   = Tmp.loc['SubCri_Len_N']['Min']
-    ParamsMin['Sub_Eff_N']      = Tmp.loc['Sub_Eff_N']['Min']
-    ParamsMin['Factor_Load_P']  = Tmp.loc['Factor_Load_P']['Min']
-    ParamsMin['Factor_Eff_P']   = Tmp.loc['Factor_Eff_P']['Min']
-    ParamsMin['Borselli-K_SDR'] = Tmp.loc['Borselli-K_SDR']['Min']
-    ParamsMin['Borselli-K_NDR'] = Tmp.loc['Borselli-K_NDR']['Min']
+    ParamsMin['Z']              = Tmp.loc['Z', 'Min']
+    ParamsMin['Factor-Kc']      = Tmp.loc['Factor-Kc', 'Min']
+    ParamsMin['Factor-Kc_m']    = Tmp.loc['Factor-Kc_m', 'Min']
+    ParamsMin['Gamma']          = Tmp.loc['Gamma', 'Min']
+    ParamsMin['Beta']           = Tmp.loc['Beta', 'Min']
+    ParamsMin['Alpha']          = Tmp.loc['Alpha', 'Min']
+    ParamsMin['Factor-C']       = Tmp.loc['Factor-C', 'Min']
+    ParamsMin['Factor-P']       = Tmp.loc['Factor-P', 'Min']
+    ParamsMin['IC0']            = Tmp.loc['Borselli-IC0', 'Min']
+    ParamsMin['L_max']          = Tmp.loc['L_max', 'Min']
+    ParamsMin['sdr_max']        = Tmp.loc['sdr_max', 'Min']
+    ParamsMin['Factor_Load_N']  = Tmp.loc['Factor_Load_N', 'Min']
+    ParamsMin['Factor_Eff_N']   = Tmp.loc['Factor_Eff_N', 'Min']
+    ParamsMin['SubCri_Len_N']   = Tmp.loc['SubCri_Len_N', 'Min']
+    ParamsMin['Sub_Eff_N']      = Tmp.loc['Sub_Eff_N', 'Min']
+    ParamsMin['Factor_Load_P']  = Tmp.loc['Factor_Load_P', 'Min']
+    ParamsMin['Factor_Eff_P']   = Tmp.loc['Factor_Eff_P', 'Min']
+    ParamsMin['Borselli-K_SDR'] = Tmp.loc['Borselli-K_SDR', 'Min']
+    ParamsMin['Borselli-K_NDR'] = Tmp.loc['Borselli-K_NDR', 'Min']
 
     # Maximum values
     ParamsMax = {}
-    ParamsMax['Z']              = Tmp.loc['Z']['Max']
-    ParamsMax['Factor-Kc']      = Tmp.loc['Factor-Kc']['Max']
-    ParamsMax['Factor-Kc_m']    = Tmp.loc['Factor-Kc_m']['Max']
-    ParamsMax['Gamma']          = Tmp.loc['Gamma']['Max']
-    ParamsMax['Beta']           = Tmp.loc['Beta']['Max']
-    ParamsMax['Alpha']          = Tmp.loc['Alpha']['Max']
-    ParamsMax['Factor-C']       = Tmp.loc['Factor-C']['Max']
-    ParamsMax['Factor-P']       = Tmp.loc['Factor-P']['Max']
-    ParamsMax['IC0']            = Tmp.loc['Borselli-IC0']['Max']
-    ParamsMax['L_max']          = Tmp.loc['L_max']['Max']
-    ParamsMax['sdr_max']        = Tmp.loc['sdr_max']['Max']
-    ParamsMax['Factor_Load_N']  = Tmp.loc['Factor_Load_N']['Max']
-    ParamsMax['Factor_Eff_N']   = Tmp.loc['Factor_Eff_N']['Max']
-    ParamsMax['SubCri_Len_N']   = Tmp.loc['SubCri_Len_N']['Max']
-    ParamsMax['Sub_Eff_N']      = Tmp.loc['Sub_Eff_N']['Max']
-    ParamsMax['Factor_Load_P']  = Tmp.loc['Factor_Load_P']['Max']
-    ParamsMax['Factor_Eff_P']   = Tmp.loc['Factor_Eff_P']['Max']
-    ParamsMax['Borselli-K_SDR'] = Tmp.loc['Borselli-K_SDR']['Max']
-    ParamsMax['Borselli-K_NDR'] = Tmp.loc['Borselli-K_NDR']['Max']
+    ParamsMax['Z']              = Tmp.loc['Z', 'Max']
+    ParamsMax['Factor-Kc']      = Tmp.loc['Factor-Kc', 'Max']
+    ParamsMax['Factor-Kc_m']    = Tmp.loc['Factor-Kc_m', 'Max']
+    ParamsMax['Gamma']          = Tmp.loc['Gamma', 'Max']
+    ParamsMax['Beta']           = Tmp.loc['Beta', 'Max']
+    ParamsMax['Alpha']          = Tmp.loc['Alpha', 'Max']
+    ParamsMax['Factor-C']       = Tmp.loc['Factor-C', 'Max']
+    ParamsMax['Factor-P']       = Tmp.loc['Factor-P', 'Max']
+    ParamsMax['IC0']            = Tmp.loc['Borselli-IC0', 'Max']
+    ParamsMax['L_max']          = Tmp.loc['L_max', 'Max']
+    ParamsMax['sdr_max']        = Tmp.loc['sdr_max', 'Max']
+    ParamsMax['Factor_Load_N']  = Tmp.loc['Factor_Load_N', 'Max']
+    ParamsMax['Factor_Eff_N']   = Tmp.loc['Factor_Eff_N', 'Max']
+    ParamsMax['SubCri_Len_N']   = Tmp.loc['SubCri_Len_N', 'Max']
+    ParamsMax['Sub_Eff_N']      = Tmp.loc['Sub_Eff_N', 'Max']
+    ParamsMax['Factor_Load_P']  = Tmp.loc['Factor_Load_P', 'Max']
+    ParamsMax['Factor_Eff_P']   = Tmp.loc['Factor_Eff_P', 'Max']
+    ParamsMax['Borselli-K_SDR'] = Tmp.loc['Borselli-K_SDR', 'Max']
+    ParamsMax['Borselli-K_NDR'] = Tmp.loc['Borselli-K_NDR', 'Max']
 
     return ParamsMin, ParamsMax
 
@@ -939,33 +941,38 @@ def Execute_AWY(ProjectPath, UserData, simulation, evaluation, NameFunObj, Facto
     # Guarda el valor de la metrica en el CSV Metric
     # --------------------------------------------------------------------------------------------------------------
     PathResults = os.path.join(ProjectPath, 'EVALUATIONS', 'AWY_Metric_' + UserData['Suffix'] + '.csv')
-    ID_File = open(PathResults, 'w')
-    ID_File.write('Z,Factor-Kc,' + NameFunObj + '\n')
-    ID_File.write('%0.2f' % x[0] + ',' +
-                  '%0.2f' % x[1] + ',' +
-                  '%0.2f' % objectivefunction + '\n')
-    ID_File.close()
+    file_exists = os.path.isfile(PathResults)
+    with open(PathResults, 'a') as ID_File:
+        if not file_exists:
+            ID_File.write('Z,Factor-Kc,' + NameFunObj + '\n')
 
+        ID_File.write('%0.2f' % x[0] + ',' +
+                      '%0.2f' % x[1] + ',' +
+                      '%0.2f' % objectivefunction + '\n')
 
     # --------------------------------------------------------------------------------------------------------------
     # Guarda el valor observado en el CSV Obs
     # --------------------------------------------------------------------------------------------------------------
-    PathRestuls = os.path.join(ProjectPath, 'EVALUATIONS', 'AWY_Obs_' + UserData['Suffix'] + '.csv')
-    ID_File = open(PathRestuls, 'w')
-    ID_File.write('Obs\n')
-    for ii in range(0, len(Obs)):
-        ID_File.write('%0.2f' % Obs[ii] + '\n')
-    ID_File.close()
+    PathResults = os.path.join(ProjectPath, 'EVALUATIONS', 'AWY_Obs_' + UserData['Suffix'] + '.csv')
+    file_exists = os.path.isfile(PathResults)
+    with open(PathResults, 'a') as ID_File:
+        if not file_exists:
+            ID_File.write('Obs\n')
+
+        for ii in range(0, len(Obs)):
+            ID_File.write('%0.2f' % Obs[ii] + '\n')
 
     # --------------------------------------------------------------------------------------------------------------
     # Guarda la simulacion en el archivo CSV Sim
     # --------------------------------------------------------------------------------------------------------------
-    PathRestuls = os.path.join(ProjectPath, 'EVALUATIONS', 'AWY_Sim_' + UserData['Suffix'] + '.csv')
-    ID_File = open(PathRestuls, 'w')
-    ID_File.write('Sim\n')
-    for ii in range(0, len(Sim)):
-        ID_File.write('%0.2f' % Sim[ii] + '\n')
-    ID_File.close()
+    PathResults = os.path.join(ProjectPath, 'EVALUATIONS', 'AWY_Sim_' + UserData['Suffix'] + '.csv')
+    file_exists = os.path.isfile(PathResults)
+    with open(PathResults, 'a') as ID_File:
+        if not file_exists:
+            ID_File.write('Sim\n')
+
+        for ii in range(0, len(Sim)):
+            ID_File.write('%0.2f' % Sim[ii] + '\n')
 
     return objectivefunction
 
@@ -1026,34 +1033,40 @@ def Execute_SWY(ProjectPath, UserData, simulation, evaluation, NameFunObj, Facto
     # Guarda el valor de la metrica en el CSV Metric
     # --------------------------------------------------------------------------------------------------------------
     PathResults = os.path.join(ProjectPath, 'EVALUATIONS', 'SWY_Metric_' + UserData['Suffix'] + '.csv')
-    ID_File = open(PathResults, 'w')
-    ID_File.write('Alpha,Beta,Gamma,Factor-Kc,' + NameFunObj + '\n')
-    ID_File.write('%0.3f' % x[0] + ',' +
-                  '%0.3f' % x[1] + ',' +
-                  '%0.3f' % x[2] + ',' +
-                  '%0.2f' % x[3] + ',' +
-                  '%0.2f' % objectivefunction + '\n')
-    ID_File.close()
+    file_exists = os.path.isfile(PathResults)
+    with open(PathResults, 'a') as ID_File:
+        if not file_exists:
+            ID_File.write('Alpha,Beta,Gamma,Factor-Kc,' + NameFunObj + '\n')
+
+        ID_File.write('%0.3f' % x[0] + ',' +
+                      '%0.3f' % x[1] + ',' +
+                      '%0.3f' % x[2] + ',' +
+                      '%0.2f' % x[3] + ',' +
+                      '%0.2f' % objectivefunction + '\n')
 
     # --------------------------------------------------------------------------------------------------------------
     # Guarda el valor observado en el CSV Obs
     # --------------------------------------------------------------------------------------------------------------
-    PathRestuls = os.path.join(ProjectPath, 'EVALUATIONS', 'SWY_Obs_' + UserData['Suffix'] + '.csv')
-    ID_File = open(PathRestuls, 'w')
-    ID_File.write('Obs\n')
-    for ii in range(0, len(Obs)):
-        ID_File.write('%0.2f' % Obs[ii] + '\n')
-    ID_File.close()
+    PathResults = os.path.join(ProjectPath, 'EVALUATIONS', 'SWY_Obs_' + UserData['Suffix'] + '.csv')
+    file_exists = os.path.isfile(PathResults)
+    with open(PathResults, 'a') as ID_File:
+        if not file_exists:
+            ID_File.write('Obs\n')
+
+        for ii in range(0, len(Obs)):
+            ID_File.write('%0.2f' % Obs[ii] + '\n')
 
     # --------------------------------------------------------------------------------------------------------------
     # Guarda la simulacion en el archivo CSV Sim
     # --------------------------------------------------------------------------------------------------------------
-    PathRestuls = os.path.join(ProjectPath, 'EVALUATIONS', 'SWY_Sim_' + UserData['Suffix'] + '.csv')
-    ID_File = open(PathRestuls, 'w')
-    ID_File.write('Sim\n')
-    for ii in range(0, len(Sim)):
-        ID_File.write('%0.2f' % Sim[ii] + '\n')
-    ID_File.close()
+    PathResults = os.path.join(ProjectPath, 'EVALUATIONS', 'SWY_Sim_' + UserData['Suffix'] + '.csv')
+    file_exists = os.path.isfile(PathResults)
+    with open(PathResults, 'a') as ID_File:
+        if not file_exists:
+            ID_File.write('Sim\n')
+
+        for ii in range(0, len(Sim)):
+            ID_File.write('%0.2f' % Sim[ii] + '\n')
 
     return objectivefunction
 
@@ -1090,6 +1103,8 @@ def Execute_SDR(ProjectPath, UserData, simulation, evaluation, NameFunObj, Facto
     args['watersheds_path']         = os.path.join(ProjectPath, 'INPUTS', 'Basin_Cal_SDR', 'Basin_Cal_SDR.shp')
     # Ruta de la carpeta de resultados de la region
     args['workspace_dir']           = os.path.join(ProjectPath, 'OUTPUTS', '03-SDR')
+    # Metodo direcciones de flujo
+    args['flow_dir_algorithm']      = 'MFD'
 
     # ---------------------------------------------------------------------
     # Ejecucion del modelo
@@ -1119,36 +1134,42 @@ def Execute_SDR(ProjectPath, UserData, simulation, evaluation, NameFunObj, Facto
     # Guarda el valor de la metrica en el CSV Metric
     # --------------------------------------------------------------------------------------------------------------
     PathResults = os.path.join(ProjectPath, 'EVALUATIONS', 'SDR_Metric_' + UserData['Suffix'] + '.csv')
-    ID_File = open(PathResults, 'w')
-    ID_File.write('sdr_max,k_param,ic_0_param,l_max,Factor-C,Factor-P,' + NameFunObj + '\n')
-    ID_File.write('%0.2f' % x[0] + ',' +
-                  '%0.2f' % x[1] + ',' +
-                  '%0.2f' % x[2] + ',' +
-                  '%0.2f' % x[3] + ',' +
-                  '%0.5f' % x[4] + ',' +
-                  '%0.5f' % x[5] + ',' +
-                  '%0.2f' % objectivefunction + '\n')
-    ID_File.close()
+    file_exists = os.path.isfile(PathResults)
+    with open(PathResults, 'a') as ID_File:
+        if not file_exists:
+            ID_File.write('sdr_max,k_param,ic_0_param,l_max,Factor-C,Factor-P,' + NameFunObj + '\n')
+
+        ID_File.write('%0.2f' % x[0] + ',' +
+                      '%0.2f' % x[1] + ',' +
+                      '%0.2f' % x[2] + ',' +
+                      '%0.2f' % x[3] + ',' +
+                      '%0.5f' % x[4] + ',' +
+                      '%0.5f' % x[5] + ',' +
+                      '%0.2f' % objectivefunction + '\n')
 
     # --------------------------------------------------------------------------------------------------------------
     # Guarda el valor observado en el CSV Obs
     # --------------------------------------------------------------------------------------------------------------
     PathResults = os.path.join(ProjectPath, 'EVALUATIONS', 'SDR_Obs_' + UserData['Suffix'] + '.csv')
-    ID_File = open(PathResults, 'w')
-    ID_File.write('Obs\n')
-    for ii in range(0, len(Obs)):
-        ID_File.write('%0.2f' % Obs[ii] + '\n')
-    ID_File.close()
+    file_exists = os.path.isfile(PathResults)
+    with open(PathResults, 'a') as ID_File:
+        if not file_exists:
+            ID_File.write('Obs\n')
+
+        for ii in range(0, len(Obs)):
+            ID_File.write('%0.2f' % Obs[ii] + '\n')
 
     # --------------------------------------------------------------------------------------------------------------
     # Guarda la simulacion en el archivo CSV Sim
     # --------------------------------------------------------------------------------------------------------------
     PathResults = os.path.join(ProjectPath, 'EVALUATIONS', 'SDR_Sim_' + UserData['Suffix'] + '.csv')
-    ID_File = open(PathResults, 'w')
-    ID_File.write('Sim\n')
-    for ii in range(0, len(Sim)):
-        ID_File.write('%0.2f' % Sim[ii] + '\n')
-    ID_File.close()
+    file_exists = os.path.isfile(PathResults)
+    with open(PathResults, 'a') as ID_File:
+        if not file_exists:
+            ID_File.write('Sim\n')
+
+        for ii in range(0, len(Sim)):
+            ID_File.write('%0.2f' % Sim[ii] + '\n')
 
     return objectivefunction
 
@@ -1183,6 +1204,8 @@ def Execute_NDR_N(ProjectPath, UserData, simulation, evaluation, NameFunObj, Fac
     args['watersheds_path']         = os.path.join(ProjectPath, 'INPUTS', 'Basin_Cal_NDR_N','Basin_Cal_NDR_N.shp')
     # Ruta de la carpeta de resultados de la region
     args['workspace_dir']           = os.path.join(ProjectPath, 'OUTPUTS', '04-NDR_N')
+    # Metodo de direcciones de flujo
+    args['flow_dir_algorithm']      = 'MFD'
 
     # --------------------------------------------------------------------------------------------------------------
     # Ejecucion del modelo de nutrientes
@@ -1195,7 +1218,7 @@ def Execute_NDR_N(ProjectPath, UserData, simulation, evaluation, NameFunObj, Fac
     raster_path = os.path.join(args['workspace_dir'], 'n_total_export_' + UserData['Suffix'] + '.tif')
     output_path = os.path.join(ProjectPath, 'TMP')
     simulation  = calculate_zonal_stats(args['watersheds_path'], raster_path, output_path,Suffix="NDR_N")
-    Sim         = simulation['mean'].values
+    Sim         = simulation['sum'].values
 
     # --------------------------------------------------------------------------------------------------------------
     # Busca los datos de carga de nitrogeno en la tabla de resultados asociados a cada cuenca
@@ -1212,35 +1235,41 @@ def Execute_NDR_N(ProjectPath, UserData, simulation, evaluation, NameFunObj, Fac
     # Guarda el valor de la metrica en el CSV Metric
     # --------------------------------------------------------------------------------------------------------------
     PathResults = os.path.join(ProjectPath, 'EVALUATIONS', 'NDR_N_Metric_' + UserData['Suffix'] + '.csv')
-    ID_File = open(PathResults, 'w')
-    ID_File.write('SubCri_Len_N,Sub_Eff_N,Borselli-K,Factor_Load_N,Factor_Eff_N,' + NameFunObj + '\n')
-    ID_File.write('%0.2f' % x[0] + ',' +
-                  '%0.2f' % x[1] + ',' +
-                  '%0.2f' % x[2] + ',' +
-                  '%0.2f' % x[3] + ',' +
-                  '%0.5f' % x[4] + ',' +
-                  '%0.2f' % objectivefunction + '\n')
-    ID_File.close()
+    file_exists = os.path.isfile(PathResults)
+    with open(PathResults, 'a') as ID_File:
+        if not file_exists:
+            ID_File.write('SubCri_Len_N,Sub_Eff_N,Borselli-K,Factor_Load_N,Factor_Eff_N,' + NameFunObj + '\n')
+
+        ID_File.write('%0.2f' % x[0] + ',' +
+                      '%0.2f' % x[1] + ',' +
+                      '%0.2f' % x[2] + ',' +
+                      '%0.2f' % x[3] + ',' +
+                      '%0.5f' % x[4] + ',' +
+                      '%0.2f' % objectivefunction + '\n')
 
     # --------------------------------------------------------------------------------------------------------------
     # Guarda el valor observado en el CSV Obs
     # --------------------------------------------------------------------------------------------------------------
     PathResults = os.path.join(ProjectPath, 'EVALUATIONS', 'NDR_N_Obs_' + UserData['Suffix'] + '.csv')
-    ID_File = open(PathResults, 'w')
-    ID_File.write('Obs\n')
-    for ii in range(0, len(Obs)):
-        ID_File.write('%0.2f' % Obs[ii] + '\n')
-    ID_File.close()
+    file_exists = os.path.isfile(PathResults)
+    with open(PathResults, 'a') as ID_File:
+        if not file_exists:
+            ID_File.write('Obs\n')
+
+        for ii in range(0, len(Obs)):
+            ID_File.write('%0.2f' % Obs[ii] + '\n')
 
     # --------------------------------------------------------------------------------------------------------------
     # Guarda la simulacion en el archivo CSV Sim
     # --------------------------------------------------------------------------------------------------------------
     PathResults = os.path.join(ProjectPath, 'EVALUATIONS', 'NDR_N_Sim_' + UserData['Suffix'] + '.csv')
-    ID_File = open(PathResults, 'w')
-    ID_File.write('Sim\n')
-    for ii in range(0, len(Sim)):
-        ID_File.write('%0.2f' % Sim[ii] + '\n')
-    ID_File.close()
+    file_exists = os.path.isfile(PathResults)
+    with open(PathResults, 'a') as ID_File:
+        if not file_exists:
+            ID_File.write('Sim\n')
+
+        for ii in range(0, len(Sim)):
+            ID_File.write('%0.2f' % Sim[ii] + '\n')
 
     # --------------------------------------------------------------------------------------------------------------
     # Salida de la funcion
@@ -1276,6 +1305,8 @@ def Execute_NDR_P(ProjectPath, UserData, simulation, evaluation, NameFunObj, Fac
     args['watersheds_path']         = os.path.join(ProjectPath, 'INPUTS', 'Basin_Cal_NDR_P', 'Basin_Cal_NDR_P.shp')
     # Ruta de la carpeta de resultados de la region
     args['workspace_dir']           = os.path.join(ProjectPath, 'OUTPUTS', '04-NDR_P')
+    # Metodo de direcciones de flujo
+    args['flow_dir_algorithm']      = 'MFD'
 
     # --------------------------------------------------------------------------------------------------------------
     # Ejecucion del modelo de nutrientes
@@ -1288,7 +1319,7 @@ def Execute_NDR_P(ProjectPath, UserData, simulation, evaluation, NameFunObj, Fac
     raster_path = os.path.join(args['workspace_dir'], 'p_surface_export_' + UserData['Suffix'] + '.tif')
     output_path = os.path.join(ProjectPath, 'TMP')
     simulation  = calculate_zonal_stats(args['watersheds_path'], raster_path, output_path,Suffix="NDR_P")
-    Sim         = simulation['mean'].values
+    Sim         = simulation['sum'].values
 
     # --------------------------------------------------------------------------------------------------------------
     # Busca los datos de carga de nitrogeno en la tabla de resultados asociados a cada cuenca
@@ -1305,33 +1336,39 @@ def Execute_NDR_P(ProjectPath, UserData, simulation, evaluation, NameFunObj, Fac
     # Guarda el valor de la metrica en el CSV Metric
     # --------------------------------------------------------------------------------------------------------------
     PathResults = os.path.join(ProjectPath, 'EVALUATIONS', 'NDR_P_Metric_' + UserData['Suffix'] + '.csv')
-    ID_File = open(PathResults, 'w')
-    ID_File.write('Borselli-K,Factor_Load_P,Factor_Eff_P,' + NameFunObj + '\n')
-    ID_File.write('%0.2f' % x[0] + ',' +
-                  '%0.2f' % x[1] + ',' +
-                  '%0.2f' % x[2] + ',' +
-                  '%0.2f' % objectivefunction + '\n')
-    ID_File.close()
+    file_exists = os.path.isfile(PathResults)
+    with open(PathResults, 'a') as ID_File:
+        if not file_exists:
+            ID_File.write('Borselli-K,Factor_Load_P,Factor_Eff_P,' + NameFunObj + '\n')
+
+        ID_File.write('%0.2f' % x[0] + ',' +
+                      '%0.2f' % x[1] + ',' +
+                      '%0.2f' % x[2] + ',' +
+                      '%0.2f' % objectivefunction + '\n')
 
     # --------------------------------------------------------------------------------------------------------------
     # Guarda el valor observado en el CSV Obs
     # --------------------------------------------------------------------------------------------------------------
     PathResults = os.path.join(ProjectPath, 'EVALUATIONS', 'NDR_P_Obs_' + UserData['Suffix'] + '.csv')
-    ID_File = open(PathResults, 'w')
-    ID_File.write('Obs\n')
-    for ii in range(0, len(Obs)):
-        ID_File.write('%0.2f' % Obs[ii] + '\n')
-    ID_File.close()
+    file_exists = os.path.isfile(PathResults)
+    with open(PathResults, 'a') as ID_File:
+        if not file_exists:
+            ID_File.write('Obs\n')
+
+        for ii in range(0, len(Obs)):
+            ID_File.write('%0.2f' % Obs[ii] + '\n')
 
     # --------------------------------------------------------------------------------------------------------------
     # Guarda la simulacion en el archivo CSV Sim
     # --------------------------------------------------------------------------------------------------------------
     PathResults = os.path.join(ProjectPath, 'EVALUATIONS', 'NDR_P_Sim_' + UserData['Suffix'] + '.csv')
-    ID_File = open(PathResults, 'w')
-    ID_File.write('Sim\n')
-    for ii in range(0, len(Sim)):
-        ID_File.write('%0.2f' % Sim[ii] + '\n')
-    ID_File.close()
+    file_exists = os.path.isfile(PathResults)
+    with open(PathResults, 'a') as ID_File:
+        if not file_exists:
+            ID_File.write('Sim\n')
+
+        for ii in range(0, len(Sim)):
+            ID_File.write('%0.2f' % Sim[ii] + '\n')
 
     # --------------------------------------------------------------------------------------------------------------
     # Salida de la funcion
